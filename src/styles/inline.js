@@ -1,0 +1,141 @@
+// Inline style objects — shared across screens
+// Extracted from App.jsx during Fase 0 refactor
+export const s = {
+  // Core layout
+  viewport: {
+    width: "100vw",
+    height: "100vh",
+    background: "var(--bg)",
+    color: "var(--tx)",
+    fontFamily: "'Space Mono',monospace",
+    fontSize: 13,
+    position: "relative",
+    overflow: "hidden",
+  },
+  bgImg: (src) => ({
+    position: "absolute",
+    inset: 0,
+    backgroundImage: `url(${src})`,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    filter: "brightness(0.5)",
+    zIndex: 0,
+  }),
+  overlay: {
+    position: "absolute",
+    inset: 0,
+    background: "radial-gradient(ellipse at 50% 30%, rgba(8,5,3,0.45) 0%, rgba(8,5,3,0.85) 70%)",
+    zIndex: 1,
+  },
+  grain: {
+    position: "absolute",
+    inset: 0,
+    pointerEvents: "none",
+    zIndex: 5,
+    opacity: 0.05,
+    background: "repeating-conic-gradient(#fff 0 25%,transparent 0 50%) 0 0/3px 3px",
+  },
+  scanline: { position: "absolute", inset: 0, pointerEvents: "none", zIndex: 5, overflow: "hidden" },
+  content: { position: "relative", zIndex: 2, width: "100%", height: "100%", display: "flex", flexDirection: "column" },
+
+  // Header bar
+  hdr: {
+    padding: "10px 32px",
+    display: "flex",
+    alignItems: "center",
+    gap: 20,
+    background: "linear-gradient(180deg, rgba(10,7,4,0.96) 0%, transparent 100%)",
+    flexShrink: 0,
+    zIndex: 3,
+  },
+  hdrBtn: (active, color) => ({
+    padding: "8px 20px",
+    borderRadius: 4,
+    border: `1px solid ${active ? color : "var(--bd)"}`,
+    background: active ? `${color}18` : "transparent",
+    color: active ? color : "var(--txd)",
+    cursor: "pointer",
+    fontSize: 12,
+    fontWeight: 700,
+    fontFamily: "'Space Mono',monospace",
+    letterSpacing: 1,
+    transition: "all .25s",
+    textTransform: "uppercase",
+  }),
+
+  // Panel
+  panel: {
+    background: "rgba(14,9,4,0.88)",
+    border: "1px solid var(--bd)",
+    borderRadius: 8,
+    backdropFilter: "blur(10px)",
+  },
+  panelGlow: (c) => ({ boxShadow: `0 0 30px ${c}11, inset 0 1px 0 ${c}22` }),
+
+  // Cards
+  card: (c) => ({
+    background: "var(--cd)",
+    border: `1px solid ${c || "var(--bd)"}`,
+    borderRadius: 6,
+    padding: 12,
+    transition: "all .25s",
+  }),
+  cardHover: { cursor: "pointer" },
+
+  // Typography
+  orb: (sz) => ({ fontFamily: "'Orbitron',sans-serif", fontSize: sz, fontWeight: 900, letterSpacing: 2 }),
+  lbl: {
+    fontSize: 10,
+    fontWeight: 700,
+    letterSpacing: 3,
+    textTransform: "uppercase",
+    color: "var(--txd)",
+    marginBottom: 8,
+    display: "block",
+  },
+  gd: { color: "var(--gd)" },
+  rd: { color: "var(--rb)" },
+  dm: { color: "var(--txd)" },
+  ft: { color: "var(--txf)" },
+
+  // Buttons
+  btn: (on, c) => ({
+    padding: "10px 20px",
+    borderRadius: 4,
+    border: `1px solid ${on ? c || "var(--gd)" : "var(--bd)"}`,
+    background: on ? `${c || "var(--gd)"}15` : "transparent",
+    color: on ? c || "var(--gd)" : "var(--txd)",
+    cursor: "pointer",
+    fontSize: 12,
+    fontWeight: 700,
+    fontFamily: "'Space Mono',monospace",
+    letterSpacing: 0.5,
+    transition: "all .25s",
+  }),
+  btnBig: (c) => ({
+    padding: "16px 40px",
+    borderRadius: 6,
+    border: `2px solid ${c}`,
+    background: `linear-gradient(180deg, ${c}22 0%, ${c}08 100%)`,
+    color: c,
+    cursor: "pointer",
+    fontSize: 16,
+    fontWeight: 900,
+    fontFamily: "'Orbitron',sans-serif",
+    letterSpacing: 3,
+    textTransform: "uppercase",
+    transition: "all .3s",
+    textShadow: `0 0 20px ${c}44`,
+  }),
+  dis: {
+    padding: "10px 20px",
+    borderRadius: 4,
+    border: "1px solid var(--bd)",
+    background: "transparent",
+    color: "var(--txf)",
+    cursor: "not-allowed",
+    fontSize: 12,
+    fontFamily: "'Space Mono',monospace",
+    opacity: 0.35,
+  },
+};
