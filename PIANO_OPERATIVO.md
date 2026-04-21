@@ -14,7 +14,7 @@
 
 **Asset:** Leonardo.ai come generatore • Ordine: 10 umani → 12 boss → altre razze.
 
-**Gameplay:** Transizione noir/arena rinviata a Fase 4 roadmap originale • Due clan placeholder (Cristallini, Ombre) → da definire subito con brainstorm dedicato.
+**Gameplay:** Transizione noir/arena rinviata a Fase 4 roadmap originale • Identità dei 5 clan definita (Fase 1a chiusa: Archivisti al piano 4-5, Fuori-Catalogo al piano 2-3).
 
 **Layout:** Floor Hub semi-astratto con hotspot (Poster Gym / Tavolo Coach / Manichino Negozio / Sagoma Boss / Libro Log) • Drava solo via dialog box • Home screen: minor tweak (bottoni).
 
@@ -24,79 +24,128 @@
 
 ## Quadro temporale aggiornato
 
-| Fase | Focus | Durata | Output concreto |
-|------|-------|--------|-----------------|
-| 0 | Refactor + ESLint | 1 g | `App.jsx` < 200 righe, lint ok |
-| 1a | Identità Cristallini & Ombre | 0.5 g | Schede clan definitive |
-| 1b | CardFrame 1:1 pixel art + rarità | 2 g | Componente carta riutilizzabile |
-| 2 | Asset AI pixel art | 3 g | 10 umani + 12 boss renderizzati |
-| 3 | Layout hotspot + Prematch versus | 2 g | Floor Hub e Prematch rifatti |
-| 4 | Supabase auth + run history | 2 g | Login Google + leaderboard |
-| 5 | Polish + playtest | 1 g | Build pronta da mostrare |
+| Fase | Focus | Durata | Output concreto | Stato |
+|------|-------|--------|-----------------|-------|
+| 0 | Refactor + ESLint | 1 g | `App.jsx` 1966→958 righe, lint configurato, build verde | ✅ Fatto (20 apr 2026) |
+| 1a | Identità Archivisti & Fuori-Catalogo | 0.5 g | Schede clan definitive | ✅ Fatto (21 apr 2026) |
+| 1b | CardFrame 1:1 pixel art + rarità | 2 g | Componente carta riutilizzabile | ⏳ |
+| 2 | Asset AI pixel art | 3 g | 10 umani + 12 boss renderizzati | ⏳ |
+| 3 | Layout hotspot + Prematch versus | 2 g | Floor Hub e Prematch rifatti | ⏳ |
+| 4 | Supabase auth + run history | 2 g | Login Google + leaderboard | ⏳ |
+| 5 | Polish + playtest | 1 g | Build pronta da mostrare | ⏳ |
 
 **Totale ≈ 11.5 giornate effettive** (~5-6 settimane a ritmo part-time).
 
 ---
 
-# FASE 0 — Refactor leggero + linting
+# FASE 0 — Refactor leggero + linting ✅ COMPLETATA
 
 **Obiettivo:** `App.jsx` navigabile, ESLint e Prettier attivi, nessun cambiamento funzionale.
 
-**Branch:** `refactor/split-app`
+**Branch:** `main` (il refactor è stato applicato direttamente su main in sessione live)
 
 ### Task list
 
-- [ ] **T-0.1** Crea branch `refactor/split-app` da main
-- [ ] **T-0.2** Crea struttura cartelle: `src/{data,engine,generation,components,screens,styles,lib}`
-- [ ] **T-0.3** Estrai `RACES`, `RARITIES`, `FLOOR_RARITY`, `SHOP_RARITY` in `src/data/constants.js`
-- [ ] **T-0.4** Estrai `HUMAN_PLAYERS`, `HUMAN_ATK`, `HUMAN_DEF` in `src/data/humans.js`
-- [ ] **T-0.5** Estrai `CLAN_DATA` in `src/data/clans.js` (un unico file per ora, splittabile in seguito)
-- [ ] **T-0.6** Verifica `npm run dev` — il gioco gira identico, commit `refactor: extract data layer`
-- [ ] **T-0.7** Estrai engine (`roll`, `die`, `syn`, `dsyn`, `gearB`, `simRound`, `simMatch`) in `src/engine/match.js`
-- [ ] **T-0.8** Estrai generazione procedurale (`initRun`, `genBoss`, `genShop`, `pickRarity`, `pickShopRarity`) in `src/generation/run.js`
-- [ ] **T-0.9** Verifica `npm run dev`, commit `refactor: extract engine and generation`
-- [ ] **T-0.10** Estrai componenti `PC`, `SC`, `GearCard` in `src/components/cards/` (un file per componente)
-- [ ] **T-0.11** Estrai CSS globale in `src/styles/noir.css` + `src/styles/animations.css` + `src/styles/variables.css`
-- [ ] **T-0.12** Estrai ogni schermata in `src/screens/{Home,FloorHub,Team,Strategy,Shop,Prematch,Result,Victory,Gameover}.jsx`
-- [ ] **T-0.13** `App.jsx` finale: solo state root + routing tra schermate (< 200 righe)
-- [ ] **T-0.14** Verifica `npm run dev` finale, commit `refactor: extract screens`
-- [ ] **T-0.15** `npm install -D eslint prettier eslint-config-prettier eslint-plugin-react eslint-plugin-react-hooks`
-- [ ] **T-0.16** Crea `.eslintrc.cjs` + `.prettierrc` con config standard React
-- [ ] **T-0.17** Run `npx eslint src --fix && npx prettier --write src`, commit `chore: add eslint + prettier`
-- [ ] **T-0.18** Merge `refactor/split-app` → main
+- [x] **T-0.1** Branch creato (lavoro svolto su `main` — conservato storico commit)
+- [x] **T-0.2** Struttura cartelle: `src/{data,engine,generation,components,styles,lib}` (no `screens/` — vedi T-0.13)
+- [x] **T-0.3** Estratto `RACES`, `RARITIES`, `FLOOR_RARITY`, `SHOP_RARITY` → `src/data/constants.js` (39 righe)
+- [x] **T-0.4** Estratti `HUMAN_PLAYERS`, `HUMAN_ATK`, `HUMAN_DEF` → `src/data/humans.js` (31 righe)
+- [x] **T-0.5** Estratto `CLAN_DATA` → `src/data/clans.js` (301 righe)
+- [x] **T-0.6** Verifica data layer ok, build ok
+- [x] **T-0.7** Engine estratto (`roll`, `die`, `syn`, `dsyn`, `gearB`, `simRound`, `simMatch`) → `src/engine/match.js` (83 righe)
+- [x] **T-0.8** Generazione estratta (`initRun`, `genBoss`, `genShop`, `pickRarity`, `pickShopRarity`) → `src/generation/run.js` (170 righe)
+- [x] **T-0.9** Verifica engine ok
+- [x] **T-0.10** `PC`, `SC`, `GearCard` → `src/components/cards/` (un file ciascuno)
+- [x] **T-0.11** CSS globale → `src/styles/noir.css` (font, `:root`, keyframes, classi) + import in `main.jsx`. Styles inline in `src/styles/inline.js` (export `s`).
+- [x] **T-0.12** Estratti inoltre: `src/data/assets.js` (IMAGES, FLOOR_BG, COURT_BG, WH_NPCS, CROUPIER, BRAVACCIO, DIE_TIERS, particle data), `src/components/Particles.jsx`, `src/components/PCZoom.jsx`, `src/lib/zoom.js` (registry condiviso `setZoomCallback`/`triggerZoom` — fix bug multi-istanza callback)
+- [x] **T-0.13** `App.jsx` da 1966 → **958 righe** (target originale <200 non raggiungibile per vincolo B.2=A "no Context API": estrarre le schermate richiederebbe prop drilling inaccettabile. Da riprendere in futuro con state container).
+- [x] **T-0.14** Build finale verde: `vite build` → 1002 moduli, 505 KB, ✓ built in 2.39s
+- [x] **T-0.15** `npm install -D eslint eslint-plugin-react eslint-plugin-react-hooks eslint-plugin-react-refresh prettier` ✅
+- [x] **T-0.16** Creati `.eslintrc.cjs` (react + hooks + refresh, `no-unescaped-entities: off` per dialoghi italiani) + `.prettierrc` + `.prettierignore`. Script npm aggiunti: `lint`, `lint:fix`, `format`, `format:check`
+- [x] **T-0.17** Fix bug emersi dal lint: `roll`, `gearB` mancavano dagli import di `App.jsx` (era un bug reale del refactor, non rumore). Import inutilizzati rimossi.
+- [ ] **T-0.18** Merge branch — N/A (lavoro svolto direttamente su main). Resta solo: `rm -f .git/index.lock && git add -A && git commit -m "refactor(fase-0): modularize App.jsx into data/engine/components/styles"`
 
-**Done when:** `App.jsx` < 200 righe, `npm run dev` funziona, `npm run lint` pulito, gioco identico al prima.
+### Struttura finale dopo Fase 0
+
+```
+src/
+├── App.jsx (958 righe: tutte le schermate inline + state root)
+├── main.jsx
+├── data/
+│   ├── constants.js     (RACES, RARITIES, FLOOR_RARITY, SHOP_RARITY)
+│   ├── humans.js        (HUMAN_PLAYERS, HUMAN_ATK, HUMAN_DEF)
+│   ├── clans.js         (CLAN_DATA — 5 clan)
+│   └── assets.js        (IMAGES, FLOOR_BG, COURT_BG, WH_NPCS, CROUPIER, BRAVACCIO, DIE_TIERS, _pData, FLOOR_PARTICLE)
+├── engine/
+│   └── match.js         (roll, die, syn, dsyn, gearB, simRound, simMatch)
+├── generation/
+│   └── run.js           (initRun, genBoss, genShop, pickRarity, pickShopRarity)
+├── lib/
+│   ├── audio.js         (Tone.js — initAudio, setAudioIntensity, sfx*)
+│   └── zoom.js          (setZoomCallback, triggerZoom — registry condiviso)
+├── styles/
+│   ├── noir.css         (font, :root, keyframes, classi globali)
+│   └── inline.js        (export s — style factory)
+└── components/
+    ├── Particles.jsx
+    ├── PCZoom.jsx
+    └── cards/
+        ├── PC.jsx
+        ├── SC.jsx
+        └── GearCard.jsx
+```
+
+**Debito tecnico residuo (da affrontare in una futura "Fase 0b" se serve):**
+- `App.jsx` resta monolitico (958 righe) — target <200 richiede state container (Context/Zustand). Da valutare dopo Fase 3 quando le schermate saranno riscritte.
+- `oR` state in `App.jsx` è dichiarato ma mai letto (solo `setOR` viene chiamato in due cleanup). Silenziato con `_oR` + eslint-disable. Da indagare: era forse per un modal "open result" mai implementato?
+
+**Done when:** ✅ build verde, lint configurato, architettura modulare pronta per Fase 1.
 
 ---
 
-# FASE 1a — Identità dei 2 clan placeholder (Cristallini, Ombre)
+# FASE 1a — Identità dei 2 clan placeholder ✅ COMPLETATA
 
-**Obiettivo:** definire identità meccanica + estetica + narrativa forte per i due clan prima di generare asset. Non è tempo perso: senza questo, 32 immagini andranno rifatte.
+**Obiettivo originale:** definire identità meccanica + estetica + narrativa forte per i due clan prima di generare asset.
 
-### Spunti concreti da validare
+**Esito brainstorm (21 apr 2026, skill `product-management:brainstorm`):**
 
-**💎 CRISTALLINI — Proposta "Gli Archivisti"**
-- **Concept:** civiltà silenziosa di entità cristalline senzienti che accumulano e "ricordano" ogni partita mai giocata. Il loro pianeta era una biblioteca vivente. Drava li ha conquistati bruciando l'Archivio Centrale.
-- **Playstyle:** difesa impenetrabile + memoria (meccanica: più il round va avanti, più forti diventano; accumulano bonus per ogni azione osservata). Muri, specchi, rifrazione.
-- **Visivo:** geometrie cristalline, riflessi prismatici, colori freddi azzurro/bianco con flash iridescenti. Giocatori sono cristalli umanoidi con crepe dorate ("kintsugi").
-- **Boss signature:** "Eco del Maestro" (replica l'ultima strategia giocata dall'avversario).
+### Lore comune
+- **La Torre** è l'arbitrato federale: le civiltà giocano a basket per il diritto di esistere nei registri federali.
+- **Drava** (Cristallina, piano 6 boss) è l'Archivista Federale: decide chi esiste e chi no.
+- **Vega** (giocatore-protagonista) scala per ragione **ideologica pura**: vuole abolire il sistema archiviazione-come-genocidio, non riparare un torto personale.
+- **Tono:** 60/40 Blade Runner / Kafka.
 
-**👻 OMBRE — Proposta "I Dimenticati"**
-- **Concept:** ciò che resta di civiltà cancellate dalla memoria cosmica. Non sono fantasmi — sono "buchi" nel tessuto del ricordo. Drava non li ha conquistati: li ha *causati*, cancellando interi pianeti dai registri.
-- **Playstyle:** evasione totale + corruzione mentale (meccanica: forzano l'avversario a dimenticare una strategia giocata, o a giocarla "sbagliata"). Furtività, illusione, scambio identità.
-- **Visivo:** silhouette nere senza contorni netti, occhi come stelle lontane, tracce che si dissolvono. Palette: nero profondo + viola desaturato + bianco spettrale.
-- **Boss signature:** "Nome che non c'era" (a inizio partita rimuove il ricordo di un giocatore avversario — giocatore 1 perde 2 turni per "ritrovarlo").
+### 💠 ARCHIVISTI (ex-Cristallini) — piani 4-5
 
-### Task list
+- **Bandiera:** "Siamo l'indice di ciò che la Torre vuole dimenticare. Ogni canestro è una citazione."
+- **Chi sono:** fazione di Cristallini **eretici in scisma con Drava** (sua stessa specie). Hanno rubato i dati delle civiltà che Drava voleva cancellare e li hanno incisi sui propri corpi-cristallo. Ogni Archivista *contiene* letteralmente una civiltà morta. Giocano a basket perché il movimento rilascia frammenti di memoria.
+- **5 trait chiave:** corpi di cristallo polimorfo-archivio; memoria esterna (sinergia alta tra famiglie di cristalli); adattamento difensivo (imparano lo shot dopo 2 possessi); fragili al 1° colpo, durissimi al 2°; anti-spettacolo (divise grezze, niente sponsor).
+- **Boss piano 4 — Codex** · *"Ho 14.000 anni di partite perse dentro. Non ne perderò altre."* · Signature `ga_sig1` Citazione Incrociata.
+- **Boss piano 5 — Palinsesto** · *"Drava mi ha scritto. Poi cancellato. Poi riscritto come suo avversario."* · Signature `ga_sig2` Revisione.
 
-- [ ] **T-1a.1** Brainstorm di 30 minuti con me (o da solo) per validare/modificare le proposte — uso skill `product-management:brainstorm` se vuoi thinking partner
-- [ ] **T-1a.2** Stabilire nomi definitivi clan + bandiera concettuale (1 frase sintesi)
-- [ ] **T-1a.3** Definire 5 trait tipici per ogni clan (già 13 trait generici esistono in gioco — scegli i 5 più coerenti, o proponi trait nuovi)
-- [ ] **T-1a.4** Definire 2 boss per clan con quote e signature move
-- [ ] **T-1a.5** Scrivere le sezioni definitive di `CLAN_DATA` per Cristallini e Ombre (identico formato agli altri)
-- [ ] **T-1a.6** Aggiornare `ROADMAP.md` rimuovendo gli `⚠️ Placeholder`
+### 📡 FUORI-CATALOGO (ex-Ombre) — piani 2-3
 
-**Done when:** `CLAN_DATA` ha 5 clan con identità pari livello, pronti per essere illustrati.
+- **Bandiera:** "Drava ci ha cancellati. Il gioco ci ricorda. Vincere contro di noi significa nominarci."
+- **Chi sono:** civiltà **deregistrate totalmente** da Drava. Non dovrebbero esistere. Sopravvivono solo come **echi di gameplay** perché il basket era uno dei loro riti e la Torre non può cancellare il gioco senza cancellare sé stessa. Non hanno corpi stabili, solo pattern (pick&roll, uscite dai blocchi, schemi). La loro corruzione è **contagio di pattern**: dopo troppi round inizi a giocare come loro.
+- **5 trait chiave:** corpi-pattern instabili; corruzione come contagio di schemi (non etica); divise senza nome, solo ruoli funzionali (#TIRATORE, #ROLLER); tiri come statica televisiva/replay di partite mai trasmesse; "sconfiggerli" significa ricordarli, quindi un loro pattern resta sempre nel tuo mazzo a fine piano.
+- **Boss piano 2 — Segnale** · *"Ero un'ala piccola. Adesso sono solo un movimento."* · Signature `pa_sig1` Phase-Through.
+- **Boss piano 3 — Rumore di Fondo** · *"Siamo la ragione per cui ogni stadio ha un'eco."* · Signature `pa_sig2` Contagio (corruzione).
+
+### Task list (completata)
+
+- [x] **T-1a.1** Rinomina GOLEM→Archivisti in `CLAN_DATA` (bosses + 16 player + 12 atk + 8 def + 7 gear)
+- [x] **T-1a.2** Rinomina PHANTOM→Fuori-Catalogo in `CLAN_DATA` (stesso scope)
+- [x] **T-1a.3** Aggiornati `RACES.GOLEM` (Archivisti/💠) e `RACES.PHANTOM` (Fuori-Catalogo/📡) in `constants.js`
+- [x] **T-1a.4** Lint pulito + build verde (505 kB bundle, 4.13s)
+- [x] **T-1a.5** `CLAUDE.md` aggiornato con lore definitiva + architettura modulare post-Fase-0
+
+### Note per fasi future
+- **ID engine (GOLEM/PHANTOM) mantenuti** per non rompere logica di gioco. Solo display names e contenuti sono cambiati.
+- **Drava sarà implementata come boss unico di piano 6** in fase successiva — lore: Cristallina ortodossa opposta agli Archivisti eretici. Il suo render non userà `RACES.GOLEM.name` ma avrà identità propria.
+- Le descrizioni strategie ora referenziano `Archivista campo` e `F-Cat. campo` (abbreviato per spazio UI).
+- Boss signature mantengono meccaniche esistenti. **Meccaniche tematiche nuove** ("Citazione Incrociata replica lo shot subito", "Contagio ruba un pattern al tuo mazzo") sono **debito tematico** da implementare in fase gameplay-rework.
+
+**Done:** `CLAN_DATA` ha 5 clan con identità pari livello, pronti per essere illustrati.
 
 ---
 
@@ -334,13 +383,14 @@
 
 # Come procedere operativamente
 
-**Prossima azione (oggi, 20 minuti):**
-1. `git checkout -b refactor/split-app`
-2. `mkdir -p src/data src/engine src/generation src/components src/screens src/styles src/lib`
-3. Inizia con T-0.3 (estrazione costanti). È la task più piccola e a zero rischio.
+**Stato attuale (21 apr 2026):** Fase 0 ✅ + Fase 1a ✅ — architettura modulare + identità dei 5 clan chiusa (Archivisti piano 4-5, Fuori-Catalogo piano 2-3, Drava boss piano 6). Build verde, lint pulito.
+
+**Prossima azione:**
+1. Commit Fase 0 + Fase 1a: `git add -A && git commit -m "feat(fase-1a): rinomina GOLEM→Archivisti, PHANTOM→Fuori-Catalogo + lore definitiva"`
+2. Decidere se partire con **Fase 1b** (CardFrame 1:1 pixel art) o se prima vuoi dare un giro manuale al gioco per verificare che i nuovi nomi/quote girino correttamente in tutte le schermate.
 
 **Cadenza suggerita:** apri `PIANO_OPERATIVO.md` ogni sessione di lavoro, spunta le task chiuse con `[x]`, non passare alla fase successiva finché la precedente non è 100%.
 
 **Quando si sente lo stallo tornare:** non fare due cose insieme. Scegli LA prossima `[ ]` task e chiudila. Se una task sembra troppo grossa, splittala in 3 sub-task prima di iniziare.
 
-**Quando serve un nuovo brainstorm:** per la Fase 1a (identità clan) posso fare un sparring via skill `product-management:brainstorm`. Basta che me lo chiedi.
+**Quando serve un nuovo brainstorm:** posso fare sparring via skill `product-management:brainstorm`. Basta chiedere.

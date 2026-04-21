@@ -6,8 +6,8 @@ export const RACES = {
   ORC: { name: "Orchi", emoji: "💀", color: "#C45B5B" },
   INSECTOID: { name: "Insettidi", emoji: "🐛", color: "#5BC47B" },
   FELINE: { name: "Felidi", emoji: "🐱", color: "#C4A85B" },
-  GOLEM: { name: "Cristallini", emoji: "💎", color: "#7BB8C4" },
-  PHANTOM: { name: "Ombre", emoji: "👻", color: "#A07BC4" },
+  GOLEM: { name: "Archivisti", emoji: "💠", color: "#7BB8C4" },
+  PHANTOM: { name: "Fuori-Catalogo", emoji: "📡", color: "#A07BC4" },
 };
 
 export const RARITIES = {

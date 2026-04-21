@@ -1,0 +1,93 @@
+/* Design tokens — rarità e dimensioni card (Fase 1b) */
+:root {
+  /* Rarity tokens — 5 livelli + legendary gradient a/b */
+  --rarity-common: #6b6b6b;
+  --rarity-uncommon: #c9a961;
+  --rarity-rare: #4a7ab8;
+  --rarity-epic: #8b5cf6;
+  --rarity-legendary-a: #e0b84a;
+  --rarity-legendary-b: #b83a3a;
+
+  /* Card dimensions */
+  --card-size: 240px;
+  --card-size-boss: 320px;
+  --card-portrait-ratio: 0.7;
+}
+
+/* Animations specifiche della CardFrame */
+@keyframes cf-pulse-rare {
+  0%,
+  100% {
+    box-shadow: 0 0 8px var(--rarity-rare)55;
+  }
+  50% {
+    box-shadow: 0 0 16px var(--rarity-rare)88;
+  }
+}
+
+@keyframes cf-pulse-epic {
+  0%,
+  100% {
+    box-shadow: 0 0 10px var(--rarity-epic)55;
+  }
+  50% {
+    box-shadow: 0 0 20px var(--rarity-epic)99;
+  }
+}
+
+@keyframes cf-pulse-legendary {
+  0%,
+  100% {
+    box-shadow: 0 0 12px var(--rarity-legendary-a)66;
+  }
+  50% {
+    box-shadow:
+      0 0 24px var(--rarity-legendary-a)aa,
+      0 0 32px var(--rarity-legendary-b)77;
+  }
+}
+
+@keyframes cf-bar-shimmer {
+  0%,
+  100% {
+    opacity: 0.65;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Base CardFrame class — hover + rarità-specifici */
+.card-frame {
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.card-frame.clickable:hover {
+  transform: translateY(-2px) scale(1.03);
+}
+
+.card-frame.rarity-rare {
+  animation: cf-pulse-rare 2.6s ease-in-out infinite;
+}
+
+.card-frame.rarity-epic {
+  animation: cf-pulse-epic 2.2s ease-in-out infinite;
+}
+
+.card-frame.rarity-legendary {
+  animation: cf-pulse-legendary 1.8s ease-in-out infinite;
+}
+
+.card-frame .cf-bar-legendary,
+.card-frame .cf-bar-epic {
+  animation: cf-bar-shimmer 2s ease-in-out infinite;
+}
+
+/* Pixel-art portrait: no smoothing, anche su browser che ne abilitano il default */
+.card-frame img.cf-portrait {
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}

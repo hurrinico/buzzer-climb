@@ -15,9 +15,8 @@ import { IMAGES, FLOOR_BG, COURT_BG, WH_NPCS, CROUPIER, BRAVACCIO, DIE_TIERS } f
 import { s } from "./styles/inline";
 
 // Imports: Components
-import PC from "./components/cards/PC";
-import SC from "./components/cards/SC";
-import GearCard from "./components/cards/GearCard";
+import CardFrame from "./components/cards/CardFrame";
+import { playerToCardProps, strategyToCardProps, gearToCardProps } from "./lib/cardProps";
 import Particles from "./components/Particles";
 import PCZoom from "./components/PCZoom";
 
@@ -29,7 +28,7 @@ import { setZoomCallback } from "./lib/zoom";
 // ============================================================
 export default function App() {
   const [g, setG] = useState(() => ({ ...initRun(), phase: "home" }));
-  const [_oR, setOR] = useState(null); // eslint-disable-line no-unused-vars
+  const [_oR, setOR] = useState(null);
   const [gT, setGT] = useState(null);
   const [subView, setSubView] = useState(null); // "team" | "strategy" | "shops" | null
   const [shopTab, setShopTab] = useState("gym");
@@ -754,7 +753,7 @@ export default function App() {
                           <span className="drag-handle">⠿</span>
                           <span style={{ ...s.ft, ...s.orb(12), minWidth: 24 }}>#{i + 1}</span>
                           <div style={{ flex: 1 }}>
-                            <PC p={p} />
+                            <CardFrame {...playerToCardProps(p, { type: "player-field" })} />
                           </div>
                           <button
                             className="btn-hover"
@@ -791,7 +790,7 @@ export default function App() {
                     >
                       {g.bench.map((p, bi) => (
                         <div key={p.id} draggable onDragStart={onDragStart("bench", bi)} onDragEnd={onDragEnd}>
-                          <PC p={p} mini onClick={() => toField(p.id)} />
+                          <CardFrame {...playerToCardProps(p, { size: 180, onClick: () => toField(p.id) })} />
                         </div>
                       ))}
                       {g.bench.length === 0 && <span style={{ ...s.ft, alignSelf: "center" }}>Vuota</span>}
@@ -875,7 +874,7 @@ export default function App() {
                             </span>
                             <span style={{ ...s.ft, ...s.orb(10), minWidth: 18 }}>{i < 5 ? `${i + 1}` : "·"}</span>
                             <div style={{ flex: 1 }}>
-                              <SC st={st} tp="atk" />
+                              <CardFrame {...strategyToCardProps(st, "atk")} />
                             </div>
                             {g.atkStrategies.length > 5 && (
                               <button
@@ -917,7 +916,7 @@ export default function App() {
                             </span>
                             <span style={{ ...s.ft, ...s.orb(10), minWidth: 18 }}>{i < 5 ? `${i + 1}` : "·"}</span>
                             <div style={{ flex: 1 }}>
-                              <SC st={st} tp="def" />
+                              <CardFrame {...strategyToCardProps(st, "def")} />
                             </div>
                             {g.defStrategies.length > 5 && (
                               <button
@@ -1008,11 +1007,11 @@ export default function App() {
                       >
                         <div style={{ flex: 1 }}>
                           {shopTab === "gym" ? (
-                            <PC p={it} mini />
+                            <CardFrame {...playerToCardProps(it, { type: "player-shop" })} />
                           ) : shopTab === "gear" ? (
-                            <GearCard g={it} />
+                            <CardFrame {...gearToCardProps(it)} />
                           ) : (
-                            <SC st={it} tp={it.stratType} />
+                            <CardFrame {...strategyToCardProps(it, it.stratType)} />
                           )}
                         </div>
                         <button
@@ -1762,7 +1761,7 @@ export default function App() {
                     <div style={s.lbl}>Giocatori in campo</div>
                     <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
                       {g.boss.field.map((p) => (
-                        <PC key={p.id} p={p} mini />
+                        <CardFrame key={p.id} {...playerToCardProps(p, { size: 180 })} />
                       ))}
                     </div>
                   </div>
@@ -1771,7 +1770,7 @@ export default function App() {
                     <div style={s.lbl}>Panchina</div>
                     <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
                       {g.boss.bench.map((p) => (
-                        <PC key={p.id} p={p} mini />
+                        <CardFrame key={p.id} {...playerToCardProps(p, { size: 180 })} />
                       ))}
                     </div>
                   </div>
@@ -1780,12 +1779,12 @@ export default function App() {
                     <div style={s.lbl}>Strategie</div>
                     <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
                       {g.boss.atkStrategies.slice(0, 5).map((st, i) => (
-                        <SC key={st.id + i} st={st} tp="atk" mini />
+                        <CardFrame key={st.id + i} {...strategyToCardProps(st, "atk", { size: 180 })} />
                       ))}
                     </div>
                     <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginTop: 8 }}>
                       {g.boss.defStrategies.slice(0, 5).map((st, i) => (
-                        <SC key={st.id + i} st={st} tp="def" mini />
+                        <CardFrame key={st.id + i} {...strategyToCardProps(st, "def", { size: 180 })} />
                       ))}
                     </div>
                   </div>
@@ -2189,8 +2188,8 @@ export default function App() {
             }}
           >
             {zoom.kind === "player" && <PCZoom p={zoom.data} />}
-            {zoom.kind === "strat" && <SC st={zoom.data} tp={zoom.extra} />}
-            {zoom.kind === "gear" && <GearCard g={zoom.data} />}
+            {zoom.kind === "strat" && <CardFrame {...strategyToCardProps(zoom.data, zoom.extra)} />}
+            {zoom.kind === "gear" && <CardFrame {...gearToCardProps(zoom.data)} />}
           </div>
         </div>
       )}
